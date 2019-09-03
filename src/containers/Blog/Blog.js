@@ -9,7 +9,8 @@ import './Blog.css';
 
 class Blog extends Component {
     state = {
-        posts: [] //We create a state with an empty array of posts
+        posts: [], //We create a state with an empty array of posts
+        selectedPostId: null
     }
 
     componentDidMount() {
@@ -26,9 +27,17 @@ class Blog extends Component {
             });
     }
 
+    postSelectedHandler = (id) => {
+        this.setState({selectedPostId: id})
+    }
+
     render() {
         const posts = this.state.posts.map(post => { //We create a const with posts from the state and we map to create an <Post for each of them/>
-            return <Post title={post.title} key={post.id} author={post.author}/>
+            return <Post 
+            title={post.title} 
+            key={post.id} 
+            author={post.author}
+            clicked={() => this.postSelectedHandler(post.id)}/>
         }
         );
 
@@ -38,7 +47,7 @@ class Blog extends Component {
                     {posts}
                 </section>
                 <section>
-                    <FullPost />
+                    <FullPost id={this.state.selectedPostId}/>
                 </section>
                 <section>
                     <NewPost />
