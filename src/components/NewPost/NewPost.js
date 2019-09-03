@@ -23,6 +23,7 @@ class NewPost extends Component {
                 console.log(response);
             });
     }
+    
 
     render () {
         return (
