@@ -10,7 +10,8 @@ import './Blog.css';
 class Blog extends Component {
     state = {
         posts: [], //We create a state with an empty array of posts
-        selectedPostId: null
+        selectedPostId: null,
+        error: false
     }
 
     componentDidMount() {
@@ -24,22 +25,29 @@ class Blog extends Component {
                     }
                 })
                 this.setState({ posts: updatedPosts }); //we set our posts state to the response.data(Posts from the api)
+            })
+            .catch(error => {
+                this.setState({ error: true })
             });
     }
 
     postSelectedHandler = (id) => {
-        this.setState({selectedPostId: id})
+        this.setState({ selectedPostId: id })
     }
 
     render() {
-        const posts = this.state.posts.map(post => { //We create a const with posts from the state and we map to create an <Post for each of them/>
-            return <Post 
-            title={post.title} 
-            key={post.id} 
-            author={post.author}
-            clicked={() => this.postSelectedHandler(post.id)}/>
+        let posts = <p>Something went wrong</p>
+        if (!this.state.error) {
+            posts = this.state.posts.map(post => { //We create a const with posts from the state and we map to create an <Post for each of them/>
+                return <Post
+                    title={post.title}
+                    key={post.id}
+                    author={post.author}
+                    clicked={() => this.postSelectedHandler(post.id)} />
+            }
+            );
         }
-        );
+
 
         return (
             <div>
@@ -47,7 +55,7 @@ class Blog extends Component {
                     {posts}
                 </section>
                 <section>
-                    <FullPost id={this.state.selectedPostId}/>
+                    <FullPost id={this.state.selectedPostId} />
                 </section>
                 <section>
                     <NewPost />
